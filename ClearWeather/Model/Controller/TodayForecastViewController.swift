@@ -6,8 +6,10 @@
 //
 
 import UIKit
+import CoreLocation
 
 class TodayForecastViewController: UIViewController {
+    
 
     let weatherConditionImage = UIImageView(image: UIImage(systemName: "sun.max"))
     let cityLabel = UILabel()
@@ -23,6 +25,8 @@ class TodayForecastViewController: UIViewController {
     let firstStackView = UIStackView()
     let secondStackView = UIStackView()
     
+    var weatherManager = WeatherManager()
+    let locationManager = CLLocationManager()
     
     
     override func viewDidLoad() {
@@ -30,14 +34,78 @@ class TodayForecastViewController: UIViewController {
         // Do any additional setup after loading the view
         
         setupUI()
+        locationButton.addTarget(self, action: #selector(self.locationButtonPressed(sender:)), for: .touchUpInside)
         
+        locationManager.delegate = self
+        locationManager.requestWhenInUseAuthorization()
+        locationManager.requestLocation()
         
-        
+        weatherManager.delegate = self
     }
+    
+    @objc func locationButtonPressed(sender: UIButton) {
+        locationManager.requestLocation()
+        print("BUTTON PRESSED!")
+    }
+    
+    
 
 
 }
 
+//MARK: - WeatherManagerDelegate
+extension TodayForecastViewController: WeatherManagerDelegate {
+    
+    func didUpdateWeather(_ weatherManager: WeatherManager, weather: WeatherModel) {
+        print(weather.temperature)
+        DispatchQueue.main.async {
+            self.temperatureLabel.text = weather.temperatureString
+            self.weatherConditionImage.image = UIImage(systemName: weather.conditionImageName)
+            self.cityLabel.text = weather.cityName
+            self.conditionLabel.text = weather.conditionName
+            
+            self.labelsArray[0].text = weather.feelsLikeString
+            self.labelsArray[1].text = weather.humidityString
+            self.labelsArray[2].text = weather.pressureString
+            self.labelsArray[3].text = weather.windSpeedString
+            self.labelsArray[4].text = weather.windDirections
+            
+        }
+    }
+    
+    func didFailWithError(error: Error) {
+        print(error)
+        
+        DispatchQueue.main.async {
+                let alert = UIAlertController(title: "Whoopss...", message: "Something went wrong while updating weather for your location. Try again, please.", preferredStyle: UIAlertController.Style.alert)
+                alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
+        }
+    }
+}
+
+//MARK: - CLLocationManagerDelegate
+
+extension TodayForecastViewController: CLLocationManagerDelegate {
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+            if let location = locations.first {
+                locationManager.stopUpdatingLocation()
+                if let location = locations.last {
+                    let lat = location.coordinate.latitude
+                    let lon = location.coordinate.longitude
+                    weatherManager.fetchWeater(latitude: lat, longitude: lon)
+                }
+            }
+        }
+        func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+            print("Failed to get users location.")
+        }
+
+
+}
+
+
+// MARK: - Autolayout
 extension TodayForecastViewController {
     private func setupUI() {
         view.backgroundColor = UIColor(named: "appBackground")
@@ -64,7 +132,7 @@ extension TodayForecastViewController {
         cityLabel.textColor = UIColor(named: "appLabel")
         cityLabel.font = UIFont.boldSystemFont(ofSize: 30)
         cityLabel.textAlignment = NSTextAlignment.center
-        cityLabel.text = "Minsk"
+        cityLabel.text = "City"
         
         NSLayoutConstraint.activate([
             cityLabel.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.5),
@@ -81,7 +149,7 @@ extension TodayForecastViewController {
         temperatureLabel.textColor = .link
         temperatureLabel.font = UIFont.systemFont(ofSize: 30)
         temperatureLabel.textAlignment = NSTextAlignment.center
-        temperatureLabel.text = "12.9°C"
+        temperatureLabel.text = "–°C"
         
         view.addSubview(conditionLabel)
         
@@ -89,8 +157,8 @@ extension TodayForecastViewController {
         conditionLabel.textColor = .link
         conditionLabel.font = UIFont.systemFont(ofSize: 30)
         conditionLabel.textAlignment = NSTextAlignment.center
-        conditionLabel.text = "Sunny"
-        conditionLabel.numberOfLines = 2
+        conditionLabel.text = "–"
+        conditionLabel.numberOfLines = 1
         
         tempAndCondStackView.axis = .horizontal
 
@@ -106,7 +174,7 @@ extension TodayForecastViewController {
         NSLayoutConstraint.activate([
             tempAndCondStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             tempAndCondStackView.topAnchor.constraint(equalTo: cityLabel.bottomAnchor, constant: 5),
-            tempAndCondStackView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.6),
+            tempAndCondStackView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.8),
             temperatureLabel.widthAnchor.constraint(equalTo: tempAndCondStackView.widthAnchor, multiplier: 0.5),
             conditionLabel.widthAnchor.constraint(equalTo: tempAndCondStackView.widthAnchor, multiplier: 0.5)
         ])
@@ -115,12 +183,13 @@ extension TodayForecastViewController {
     
         for i in 0...4 {
             
+            
             iconsArray.append(UIImageView(image: UIImage(systemName: "cloud.rain")))
             iconsArray[i].tintColor = UIColor(named: "appIcons")
             iconsArray[i].translatesAutoresizingMaskIntoConstraints = false
             
             NSLayoutConstraint.activate([
-                iconsArray[i].widthAnchor.constraint(equalToConstant: 50),
+                iconsArray[i].widthAnchor.constraint(equalToConstant: 40),
                 iconsArray[i].heightAnchor.constraint(equalTo: iconsArray[i].widthAnchor),
             ])
             
@@ -129,7 +198,7 @@ extension TodayForecastViewController {
             labelsArray[i].textColor = UIColor(named: "appLabel")
             labelsArray[i].font = UIFont.systemFont(ofSize: 15)
             labelsArray[i].textAlignment = NSTextAlignment.center
-            labelsArray[i].text = "1019 pHa"
+            labelsArray[i].text = "0.00"
             labelsArray[i].numberOfLines = 1
             
             NSLayoutConstraint.activate([
@@ -138,8 +207,9 @@ extension TodayForecastViewController {
             
             stackViewsArray.append(UIStackView())
             stackViewsArray[i].axis = .vertical
+            stackViewsArray[i].spacing = 1
             stackViewsArray[i].alignment = .center // .Leading .FirstBaseline .Center .Trailing .LastBaseline
-            stackViewsArray[i].distribution = .fill // .FillEqually .FillProportionally .EqualSpacing .EqualCentering
+            stackViewsArray[i].distribution = .fillEqually // .FillEqually .FillProportionally .EqualSpacing .EqualCentering
 
             stackViewsArray[i].addArrangedSubview(iconsArray[i])
             stackViewsArray[i].addArrangedSubview(labelsArray[i])
@@ -154,10 +224,15 @@ extension TodayForecastViewController {
             
         }
         
+        self.iconsArray[0].image = UIImage(systemName: "face.dashed")
+        self.iconsArray[1].image = UIImage(systemName: "cloud.rain")
+        self.iconsArray[2].image = UIImage(systemName: "speedometer")
+        self.iconsArray[3].image = UIImage(systemName: "wind")
+        self.iconsArray[4].image = UIImage(systemName: "safari")
+        
         // MARK: - First StackView for icons
         
         firstStackView.axis = .horizontal
-
         firstStackView.alignment = .center // .Leading .FirstBaseline .Center .Trailing .LastBaseline
         firstStackView.distribution = .equalSpacing // .FillEqually .FillProportionally .EqualSpacing .EqualCentering
 
@@ -174,13 +249,12 @@ extension TodayForecastViewController {
             firstStackView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.9),
         ])
         for i in 0...2 {
-            stackViewsArray[i].widthAnchor.constraint(equalTo: firstStackView.widthAnchor, multiplier: 0.35).isActive = true
+            stackViewsArray[i].widthAnchor.constraint(equalTo: firstStackView.widthAnchor, multiplier: 0.3).isActive = true
         }
         
         // MARK: - Second StackView for icons
         
         secondStackView.axis = .horizontal
-        secondStackView.spacing = 10
         secondStackView.alignment = .center // .Leading .FirstBaseline .Center .Trailing .LastBaseline
         secondStackView.distribution = .fill // .FillEqually .FillProportionally .EqualSpacing .EqualCentering
 
@@ -194,10 +268,10 @@ extension TodayForecastViewController {
         NSLayoutConstraint.activate([
             secondStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             secondStackView.topAnchor.constraint(equalTo: firstStackView.bottomAnchor, constant: 10),
-            secondStackView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.5),
+            secondStackView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.6),
         ])
         for i in 3...4 {
-            stackViewsArray[i].widthAnchor.constraint(equalTo: secondStackView.widthAnchor, multiplier: 0.35).isActive = true
+            stackViewsArray[i].widthAnchor.constraint(equalTo: secondStackView.widthAnchor, multiplier: 0.39).isActive = true
         }
         
         // MARK: - Location Button

@@ -3,6 +3,7 @@
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19454"/>
+        <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -12,7 +13,9 @@
         <scene sceneID="xIi-iR-3fe">
             <objects>
                 <navigationController id="qX6-4f-R1n" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Today" selectedImage="sun.min.fill" catalog="system" id="zYu-kB-Bwg"/>
+                    <tabBarItem key="tabBarItem" title="Today" id="zYu-kB-Bwg">
+                        <imageReference key="selectedImage" image="sun.min.fill" catalog="system" symbolScale="default"/>
+                    </tabBarItem>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="Whe-hp-cz3">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
