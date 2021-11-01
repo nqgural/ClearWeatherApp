@@ -6,6 +6,7 @@
 
 import Foundation
 import CoreLocation
+import Network
 
 protocol WeatherManagerDelegate {
     func didUpdateWeather(_ weatherManager: WeatherManager, weather: WeatherModel)
@@ -14,6 +15,7 @@ protocol WeatherManagerDelegate {
 
 struct WeatherManager {
     let weatherURL = "https://api.openweathermap.org/data/2.5/weather?units=metric&appid=882d566686f054834544c7b9dbeb43f6"
+    let monitor = NWPathMonitor()
     
     var delegate: WeatherManagerDelegate?
     
