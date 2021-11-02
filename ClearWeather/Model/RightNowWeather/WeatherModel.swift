@@ -94,7 +94,7 @@ struct WeatherModel {
         case 801...900:
             return "Cloudy"
         default:
-            return "questionmark.circle"
+            return "Whoops"
         }
 
     }

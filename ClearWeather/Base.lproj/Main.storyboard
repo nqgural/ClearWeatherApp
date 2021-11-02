@@ -13,8 +13,8 @@
         <scene sceneID="xIi-iR-3fe">
             <objects>
                 <navigationController id="qX6-4f-R1n" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Today" image="sun.min.fill" id="zYu-kB-Bwg">
-                        <imageReference key="selectedImage" image="sun.min.fill" catalog="system" symbolScale="default"/>
+                    <tabBarItem key="tabBarItem" title="Today" image="sun.min.fill" catalog="system" id="zYu-kB-Bwg">
+                        <imageReference key="selectedImage" image="sun.min.fill" catalog="system" symbolScale="large"/>
                     </tabBarItem>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="Whe-hp-cz3">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
@@ -46,7 +46,7 @@
             </objects>
             <point key="canvasLocation" x="-1436" y="745.27736131934034"/>
         </scene>
-        <!--City-->
+        <!--Next 5 days forecast-->
         <scene sceneID="Iju-Fj-o4s">
             <objects>
                 <tableViewController id="Cbw-LW-Fwk" customClass="WeekForecastViewController" customModule="ClearWeather" customModuleProvider="target" sceneMemberID="viewController">
@@ -77,7 +77,7 @@
                             <outlet property="delegate" destination="Cbw-LW-Fwk" id="fyu-cN-d0q"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="City" id="1zj-zs-2Ux"/>
+                    <navigationItem key="navigationItem" title="Next 5 days forecast" id="1zj-zs-2Ux"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KaY-Vk-Lwa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -92,6 +92,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <tabBarAppearance key="scrollEdgeAppearance"/>
                     </tabBar>
                     <connections>
@@ -103,11 +104,11 @@
             </objects>
             <point key="canvasLocation" x="-761" y="-705"/>
         </scene>
-        <!--Week Forecast-->
+        <!--Next 5 days-->
         <scene sceneID="lLW-SF-sVB">
             <objects>
                 <navigationController id="YjT-fP-uaq" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Week Forecast" image="calendar" catalog="system" selectedImage="calendar" id="1L7-jd-3gD"/>
+                    <tabBarItem key="tabBarItem" title="Next 5 days" image="calendar" catalog="system" selectedImage="calendar" id="1L7-jd-3gD"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="7QW-pW-ouv">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -124,7 +125,6 @@
     </scenes>
     <resources>
         <image name="calendar" catalog="system" width="128" height="106"/>
-        <image name="sun.min.fill" width="128" height="128"/>
         <image name="sun.min.fill" catalog="system" width="128" height="121"/>
         <systemColor name="systemGray2Color">
             <color red="0.68235294117647061" green="0.68235294117647061" blue="0.69803921568627447" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

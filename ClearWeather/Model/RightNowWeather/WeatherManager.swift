@@ -6,7 +6,6 @@
 
 import Foundation
 import CoreLocation
-import Network
 
 protocol WeatherManagerDelegate {
     func didUpdateWeather(_ weatherManager: WeatherManager, weather: WeatherModel)
@@ -15,7 +14,7 @@ protocol WeatherManagerDelegate {
 
 struct WeatherManager {
     let weatherURL = "https://api.openweathermap.org/data/2.5/weather?units=metric&appid=882d566686f054834544c7b9dbeb43f6"
-    let monitor = NWPathMonitor()
+   
     
     var delegate: WeatherManagerDelegate?
     
@@ -24,10 +23,11 @@ struct WeatherManager {
         performRequest(with: urlString)
     }
     
-    func fetchWeater(latitude lat: CLLocationDegrees, longitude lon: CLLocationDegrees) {
+    func fetchWeather(latitude lat: CLLocationDegrees, longitude lon: CLLocationDegrees) {
         let urlString = "\(weatherURL)&lat=\(lat)&lon=\(lon)"
         performRequest(with: urlString)
     }
+    
     
     func performRequest(with urlString: String) {
         //1. Create URL

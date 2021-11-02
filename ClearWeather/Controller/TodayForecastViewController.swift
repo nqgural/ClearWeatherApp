@@ -55,8 +55,9 @@ class TodayForecastViewController: UIViewController {
         
         self.cityLabel.text = "Updating..."
         locationManager.requestLocation()
-        print("BUTTON PRESSED!")
         buttonAnimation(sender: locationButton)
+        
+        print("BUTTON PRESSED!")
     }
     
     func buttonAnimation(sender: UIButton) {
@@ -80,25 +81,12 @@ extension TodayForecastViewController: WeatherManagerDelegate {
     func didUpdateWeather(_ weatherManager: WeatherManager, weather: WeatherModel) {
         print(weather.temperature)
         DispatchQueue.main.async {
-            self.iconsArray[0].image = UIImage(systemName: "face.dashed")
-            self.iconsArray[1].image = UIImage(systemName: "cloud.rain")
-            self.iconsArray[2].image = UIImage(systemName: "speedometer")
-            self.iconsArray[3].image = UIImage(systemName: "wind")
-            self.iconsArray[4].image = UIImage(systemName: "safari")
-            
-            self.spinner.stopAnimating()
-            self.weatherConditionImage.tintColor = UIColor(named: "appIcons")
+            self.addLayoutelements(withWeatherInfo: weather)
             
             self.temperatureLabel.text = weather.temperatureString
             self.weatherConditionImage.image = UIImage(systemName: weather.conditionImageName)
             self.cityLabel.text = weather.cityName
             self.conditionLabel.text = weather.conditionName
-            
-            self.labelsArray[0].text = weather.feelsLikeString
-            self.labelsArray[1].text = weather.humidityString
-            self.labelsArray[2].text = weather.pressureString
-            self.labelsArray[3].text = weather.windSpeedString
-            self.labelsArray[4].text = weather.windDirections
             
         }
     }
@@ -123,7 +111,7 @@ extension TodayForecastViewController: CLLocationManagerDelegate {
             if let location = locations.last {
                 let lat = location.coordinate.latitude
                 let lon = location.coordinate.longitude
-                weatherManager.fetchWeater(latitude: lat, longitude: lon)
+                weatherManager.fetchWeather(latitude: lat, longitude: lon)
             }
         }
     }
@@ -326,6 +314,23 @@ extension TodayForecastViewController {
             locationButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20)
         ])
         
+    }
+    
+    func addLayoutelements(withWeatherInfo weather: WeatherModel) {
+        self.iconsArray[0].image = UIImage(systemName: "face.dashed")
+        self.iconsArray[1].image = UIImage(systemName: "cloud.rain")
+        self.iconsArray[2].image = UIImage(systemName: "speedometer")
+        self.iconsArray[3].image = UIImage(systemName: "wind")
+        self.iconsArray[4].image = UIImage(systemName: "safari")
+        
+        self.spinner.stopAnimating()
+        self.weatherConditionImage.tintColor = UIColor(named: "appIcons")
+        
+        self.labelsArray[0].text = weather.feelsLikeString
+        self.labelsArray[1].text = weather.humidityString
+        self.labelsArray[2].text = weather.pressureString
+        self.labelsArray[3].text = weather.windSpeedString
+        self.labelsArray[4].text = weather.windDirections
     }
 }
 
