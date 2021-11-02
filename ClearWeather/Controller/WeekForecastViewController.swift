@@ -23,12 +23,18 @@ class WeekForecastViewController: UITableViewController {
         self.registerTableViewCells()
         
         locationManager.delegate = self
-        locationManager.requestWhenInUseAuthorization()
         locationManager.requestLocation()
         
         weatherManager.delegate = self
+        NotificationCenter.default.addObserver(self, selector: #selector(locationButtonPressed), name: Notification.Name("LocationButtonPressed"), object: nil)
+
 
     }
+    
+    @objc func locationButtonPressed (notification: NSNotification) {
+        locationManager.requestLocation()
+    }
+
     
 // MARK: - TABLE GENERATING
     private func registerTableViewCells() {
@@ -76,15 +82,7 @@ extension WeekForecastViewController: HourlyWeatherManagerDelegate {
         DispatchQueue.main.async {
             self.fillSectionNames(from: weather)
             self.fillItemsData(from: weather)
-            print(self.items.count)
-            
-            /*self.addLayoutelements(withWeatherInfo: weather)
-            
-            self.temperatureLabel.text = weather.temperatureString
-            self.weatherConditionImage.image = UIImage(systemName: weather.conditionImageName)
-            self.cityLabel.text = weather.cityName
-            self.conditionLabel.text = weather.conditionName*/
-            
+            self.tableView.reloadData()
         }
     }
     
@@ -130,6 +128,7 @@ extension WeekForecastViewController {
     }
     
     func fillItemsData(from weather: [HourlyList]) {
+        items.removeAll()
         var weatherModels = [HourlyWeatherModel]()
         for i in 0...weather.count-1 {
             let weatherModel = HourlyWeatherModel(conditionId: weather[i].weather[0].id, temperature: weather[i].main.temp, date: weather[i].dt)

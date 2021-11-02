@@ -58,6 +58,7 @@ class TodayForecastViewController: UIViewController {
         buttonAnimation(sender: locationButton)
         
         print("BUTTON PRESSED!")
+        NotificationCenter.default.post(name: Notification.Name("LocationButtonPressed"), object: nil)
     }
     
     func buttonAnimation(sender: UIButton) {
