@@ -7,7 +7,7 @@
 
 import UIKit
 
-class CustomTableViewCell: UITableViewCell {
+final class CustomTableViewCell: UITableViewCell {
 
     let weatherConditionImage = UIImageView(image: UIImage(systemName: "sun.max"))
     let timeLabel = UILabel()
@@ -21,8 +21,6 @@ class CustomTableViewCell: UITableViewCell {
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
     }
     
     
@@ -31,7 +29,7 @@ class CustomTableViewCell: UITableViewCell {
 
 // MARK: - Autolayout
 extension CustomTableViewCell {
-    func setupUI() {
+    private func setupUI() {
         
         NSLayoutConstraint.activate([
             self.widthAnchor.constraint(equalToConstant: 80)

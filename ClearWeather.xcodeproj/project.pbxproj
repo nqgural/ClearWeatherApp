@@ -74,11 +74,11 @@
 		100AEB95272DA89700C82203 /* ClearWeather */ = {
 			isa = PBXGroup;
 			children = (
-				10AD2190272F1AB600F1FDAD /* Controller */,
 				10AD218B272F1A5000F1FDAD /* Model */,
+				10AD2190272F1AB600F1FDAD /* Controller */,
+				109D1D242731648F00040B47 /* View */,
 				100AEB96272DA89700C82203 /* AppDelegate.swift */,
 				100AEB98272DA89700C82203 /* SceneDelegate.swift */,
-				100AEB9C272DA89700C82203 /* Main.storyboard */,
 				100AEB9F272DA89800C82203 /* Assets.xcassets */,
 				100AEBA1272DA89800C82203 /* LaunchScreen.storyboard */,
 				100AEBA4272DA89800C82203 /* Info.plist */,
@@ -106,6 +106,15 @@
 			path = HourlyWeather;
 			sourceTree = "<group>";
 		};
+		109D1D242731648F00040B47 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				10164548272FBF6100168049 /* CustomTableViewCell.xib */,
+				100AEB9C272DA89700C82203 /* Main.storyboard */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		10AD218B272F1A5000F1FDAD /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -121,7 +130,6 @@
 				100AEB9A272DA89700C82203 /* TodayForecastViewController.swift */,
 				100AEBAA272DB35B00C82203 /* WeekForecastViewController.swift */,
 				10164547272FBF6100168049 /* CustomTableViewCell.swift */,
-				10164548272FBF6100168049 /* CustomTableViewCell.xib */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -360,6 +368,7 @@
 				DEVELOPMENT_TEAM = T5TU43N9GV;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ClearWeather/Info.plist;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We need your location to get the current weather for your city.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -389,6 +398,7 @@
 				DEVELOPMENT_TEAM = T5TU43N9GV;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ClearWeather/Info.plist;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We need your location to get the current weather for your city.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;

@@ -96,11 +96,9 @@ struct WeatherModel {
         default:
             return "Whoops"
         }
-
     }
     
     var temperatureString: String {
         String(format: "%.1f", temperature) + " °C"
     }
-
 }

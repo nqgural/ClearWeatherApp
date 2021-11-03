@@ -12,7 +12,6 @@ struct HourlyWeatherModel {
     let temperature: Double
     let date: TimeInterval
     
-    
     var temperatureString: String {
         String(format: "%.0f", temperature) + "°"
     }
@@ -71,9 +70,5 @@ struct HourlyWeatherModel {
         default:
             return "Whoops"
         }
-        
-        
-
     }
-
 }

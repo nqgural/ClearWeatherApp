@@ -8,8 +8,8 @@
 import UIKit
 import CoreLocation
 
-class TodayForecastViewController: UIViewController {
-    
+final class TodayForecastViewController: UIViewController {
+    @IBOutlet weak var scrollView: UIScrollView!
     let weatherConditionImageView = UIView()
     let weatherConditionImage = UIImageView(image: UIImage(systemName: "sun.max"))
     let cityLabel = UILabel()
@@ -30,50 +30,16 @@ class TodayForecastViewController: UIViewController {
     
     let spinner = UIActivityIndicatorView(style: .large)
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view
         
         setupUI()
         locationButton.addTarget(self, action: #selector(self.locationButtonPressed(sender:)), for: .touchUpInside)
-        
         locationManager.delegate = self
-        locationManager.requestWhenInUseAuthorization()
-        locationManager.requestLocation()
-        
         weatherManager.delegate = self
-
+        sendRequests()
     }
-    
-    @objc func locationButtonPressed(sender: UIButton) {
-        setupUI()
-        
-        for i in 0...4 {
-            self.iconsArray[i].image = UIImage(systemName: "")
-        }
-        
-        self.cityLabel.text = "Updating..."
-        locationManager.requestLocation()
-        buttonAnimation(sender: locationButton)
-        
-        print("BUTTON PRESSED!")
-        NotificationCenter.default.post(name: Notification.Name("LocationButtonPressed"), object: nil)
-    }
-    
-    func buttonAnimation(sender: UIButton) {
-
-        UIView.animate(withDuration: 0.1) {
-            sender.layer.backgroundColor =  UIColor(named: "buttonColorHighlighted")?.cgColor
-        }
-        UIView.animate(withDuration: 0.2) {
-            sender.layer.backgroundColor =  UIColor.link.cgColor
-        }
-
-}
-
-    
-
 }
 
 //MARK: - WeatherManagerDelegate
@@ -83,7 +49,6 @@ extension TodayForecastViewController: WeatherManagerDelegate {
         print(weather.temperature)
         DispatchQueue.main.async {
             self.addLayoutelements(withWeatherInfo: weather)
-            
             self.temperatureLabel.text = weather.temperatureString
             self.weatherConditionImage.image = UIImage(systemName: weather.conditionImageName)
             self.cityLabel.text = weather.cityName
@@ -107,7 +72,7 @@ extension TodayForecastViewController: WeatherManagerDelegate {
 
 extension TodayForecastViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if let location = locations.first {
+        if locations.first != nil {
             locationManager.stopUpdatingLocation()
             if let location = locations.last {
                 let lat = location.coordinate.latitude
@@ -119,22 +84,49 @@ extension TodayForecastViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         print("Failed to get users location.")
     }
-
-
 }
 
+// MARK: - Class methods
+extension TodayForecastViewController {
+    private func sendRequests() {
+        locationManager.requestWhenInUseAuthorization()
+        locationManager.requestLocation()
+    }
+    
+    @objc private func locationButtonPressed(sender: UIButton) {
+        setupUI()
+
+        for i in 0...4 {
+            self.iconsArray[i].image = UIImage(systemName: "")
+        }
+        
+        self.cityLabel.text = "Updating..."
+        locationManager.requestLocation()
+        buttonAnimation(sender: locationButton)
+        
+        print("BUTTON PRESSED!")
+        NotificationCenter.default.post(name: Notification.Name("LocationButtonPressed"), object: nil)
+    }
+    
+    private func buttonAnimation(sender: UIButton) {
+
+        UIView.animate(withDuration: 0.1) {
+            sender.layer.backgroundColor =  UIColor(named: "buttonColorHighlighted")?.cgColor
+        }
+        UIView.animate(withDuration: 0.2) {
+            sender.layer.backgroundColor =  UIColor.link.cgColor
+        }
+    }
+}
 
 // MARK: - Autolayout
 extension TodayForecastViewController {
     private func setupUI() {
-        
         locationButton.backgroundColor = locationButton.isHighlighted ? UIColor.black : UIColor.white
         view.backgroundColor = UIColor(named: "appBackground")
         
         // MARK: - Weather Condition Image Constraints
-        
         view.addSubview(weatherConditionImage)
-
         
         weatherConditionImage.tintColor = UIColor(named: "appBackground")
         weatherConditionImage.translatesAutoresizingMaskIntoConstraints = false
@@ -142,7 +134,6 @@ extension TodayForecastViewController {
         
         spinner.translatesAutoresizingMaskIntoConstraints = false
         spinner.transform = CGAffineTransform.init(scaleX: 1.5, y: 1.5)
-        
         spinner.startAnimating()
         
         NSLayoutConstraint.activate([
@@ -165,7 +156,7 @@ extension TodayForecastViewController {
         cityLabel.text = "Data loading..."
         
         NSLayoutConstraint.activate([
-            cityLabel.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.5),
+            cityLabel.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.9),
             cityLabel.heightAnchor.constraint(equalTo: cityLabel.widthAnchor, multiplier: 0.2),
             cityLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             cityLabel.topAnchor.constraint(equalTo: weatherConditionImage.bottomAnchor, constant: 3),
@@ -212,8 +203,6 @@ extension TodayForecastViewController {
         // MARK: - Icon + Label Stack Views
     
         for i in 0...4 {
-            
-            
             iconsArray.append(UIImageView(image: UIImage(systemName: "")))
             iconsArray[i].tintColor = UIColor(named: "appIcons")
             iconsArray[i].translatesAutoresizingMaskIntoConstraints = false
@@ -269,7 +258,7 @@ extension TodayForecastViewController {
         
         NSLayoutConstraint.activate([
             firstStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            firstStackView.topAnchor.constraint(equalTo: tempAndCondStackView.bottomAnchor, constant: 40),
+            firstStackView.topAnchor.constraint(equalTo: tempAndCondStackView.bottomAnchor, constant: 30),
             firstStackView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.9),
         ])
         for i in 0...2 {
@@ -312,12 +301,12 @@ extension TodayForecastViewController {
             locationButton.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.9),
             locationButton.heightAnchor.constraint(equalToConstant: 45),
             locationButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            locationButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20)
+            locationButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -15)
         ])
         
     }
     
-    func addLayoutelements(withWeatherInfo weather: WeatherModel) {
+    private func addLayoutelements(withWeatherInfo weather: WeatherModel) {
         self.iconsArray[0].image = UIImage(systemName: "face.dashed")
         self.iconsArray[1].image = UIImage(systemName: "cloud.rain")
         self.iconsArray[2].image = UIImage(systemName: "speedometer")

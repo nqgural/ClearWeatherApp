@@ -44,7 +44,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="00a-m1-HLc" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1436" y="745.27736131934034"/>
+            <point key="canvasLocation" x="-1447.2" y="891.90404797601207"/>
         </scene>
         <!--Next 5 days forecast-->
         <scene sceneID="Iju-Fj-o4s">
@@ -54,35 +54,17 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="sectionIndexBackgroundColor" systemColor="systemGray2Color"/>
-                        <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="80" id="Cy8-HJ-YwP">
-                                <rect key="frame" x="16" y="49.5" width="343" height="80"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Cy8-HJ-YwP" id="AQG-EU-CGo" customClass="CustomTableViewCell" customModule="ClearWeather" customModuleProvider="target">
-                                    <rect key="frame" x="0.0" y="0.0" width="343" height="80"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                </tableViewCellContentView>
-                            </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="80" id="OTu-9W-vxf">
-                                <rect key="frame" x="16" y="129.5" width="343" height="80"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="OTu-9W-vxf" id="FVj-5k-q9b" customClass="CustomTableViewCell" customModule="ClearWeather" customModuleProvider="target">
-                                    <rect key="frame" x="0.0" y="0.0" width="343" height="80"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                </tableViewCellContentView>
-                            </tableViewCell>
-                        </prototypes>
                         <connections>
                             <outlet property="dataSource" destination="Cbw-LW-Fwk" id="UWJ-h3-RfQ"/>
                             <outlet property="delegate" destination="Cbw-LW-Fwk" id="fyu-cN-d0q"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Next 5 days forecast" id="1zj-zs-2Ux"/>
+                    <navigationItem key="navigationItem" title="Next 5 days forecast" id="UJb-hQ-jGQ"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KaY-Vk-Lwa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-127.2" y="745.27736131934034"/>
+            <point key="canvasLocation" x="-102" y="919"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="ga2-Yv-rja">
@@ -109,7 +91,7 @@
             <objects>
                 <navigationController id="YjT-fP-uaq" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Next 5 days" image="calendar" catalog="system" selectedImage="calendar" id="1L7-jd-3gD"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="7QW-pW-ouv">
+                    <navigationBar key="navigationBar" userInteractionEnabled="NO" contentMode="scaleToFill" id="7QW-pW-ouv">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <navigationBarAppearance key="scrollEdgeAppearance"/>

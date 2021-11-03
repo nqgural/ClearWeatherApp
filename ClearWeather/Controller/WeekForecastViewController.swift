@@ -8,17 +8,16 @@
 import UIKit
 import CoreLocation
 
-class WeekForecastViewController: UITableViewController {
-    
+final class WeekForecastViewController: UITableViewController {
     var weatherManager = HourlyWeatherManager()
     var locationManager = CLLocationManager()
-    
     var section = [String]()
-
     var items = [[HourlyWeatherModel]]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        tableView.contentInset = UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0)
+        
         self.tableView.delegate = self
         self.registerTableViewCells()
         
@@ -27,14 +26,7 @@ class WeekForecastViewController: UITableViewController {
         
         weatherManager.delegate = self
         NotificationCenter.default.addObserver(self, selector: #selector(locationButtonPressed), name: Notification.Name("LocationButtonPressed"), object: nil)
-
-
     }
-    
-    @objc func locationButtonPressed (notification: NSNotification) {
-        locationManager.requestLocation()
-    }
-
     
 // MARK: - TABLE GENERATING
     private func registerTableViewCells() {
@@ -99,7 +91,7 @@ extension WeekForecastViewController: HourlyWeatherManagerDelegate {
     
 extension WeekForecastViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if let location = locations.first {
+        if locations.first != nil {
             locationManager.stopUpdatingLocation()
             if let location = locations.last {
                 let lat = location.coordinate.latitude
@@ -115,19 +107,18 @@ extension WeekForecastViewController: CLLocationManagerDelegate {
 
 }
 
-// MARK: - DIFFERENT METHODS
+// MARK: - Class methods
 extension WeekForecastViewController {
-    func fillSectionNames(from weather: [HourlyList]) {
+    private func fillSectionNames(from weather: [HourlyList]) {
         section.removeAll()
         for i in 0...weather.count-1 {
             let weatherModel = HourlyWeatherModel(conditionId: weather[i].weather[0].id, temperature: weather[i].main.temp, date: weather[i].dt)
-            
             section.append(weatherModel.weekDayString)
         }
         section = section.uniqued()
     }
     
-    func fillItemsData(from weather: [HourlyList]) {
+    private func fillItemsData(from weather: [HourlyList]) {
         items.removeAll()
         var weatherModels = [HourlyWeatherModel]()
         for i in 0...weather.count-1 {
@@ -147,9 +138,10 @@ extension WeekForecastViewController {
         }
     }
     
+    @objc private func locationButtonPressed (notification: NSNotification) {
+        locationManager.requestLocation()
+    }
 }
-
-
 
 extension Sequence where Element: Hashable {
     func uniqued() -> [Element] {

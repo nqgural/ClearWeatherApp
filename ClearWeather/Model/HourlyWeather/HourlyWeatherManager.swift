@@ -7,7 +7,7 @@
 import Foundation
 import CoreLocation
 
-protocol HourlyWeatherManagerDelegate {
+protocol HourlyWeatherManagerDelegate: WeekForecastViewController {
     func didUpdateWeather(_ weatherManager: HourlyWeatherManager, weather: [HourlyList])
     func didFailWithError(error: Error)
 }
@@ -15,14 +15,14 @@ protocol HourlyWeatherManagerDelegate {
 struct HourlyWeatherManager {
     let weatherURL = "https://api.openweathermap.org/data/2.5/forecast?exclude=daily&units=metric&appid=882d566686f054834544c7b9dbeb43f6"
     
-    var delegate: HourlyWeatherManagerDelegate?
+    weak var delegate: HourlyWeatherManagerDelegate?
     
     func fetchHourlyWeather(latitude lat: CLLocationDegrees, longitude lon: CLLocationDegrees) {
         let urlString = "\(weatherURL)&lat=\(lat)&lon=\(lon)"
         performRequest(with: urlString)
     }
     
-    func performRequest(with urlString: String) {
+    private func performRequest(with urlString: String) {
         //1. Create URL
         if let url = URL(string: urlString) {
             //2. Create URLSession
@@ -44,19 +44,13 @@ struct HourlyWeatherManager {
         }
     }
     
-    func parseJSON(_ hourlyWeatherData: Data) -> [HourlyList]? {
+    private func parseJSON(_ hourlyWeatherData: Data) -> [HourlyList]? {
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
         do {
             let decodedData = try decoder.decode(HourlyWeatherData.self, from: hourlyWeatherData)
             let list = decodedData.list
-            
-                /*let date = decodedData.list[0].dt
-            let temperature = decodedData.list[1].main.temp
-            let conditionId = decodedData.list[2].weather[0].id
-            let weather = HourlyWeatherModel(conditionId: conditionId, temperature: temperature, date: date)*/
             return list
-            
         } catch {
             delegate?.didFailWithError(error: error)
             return nil
